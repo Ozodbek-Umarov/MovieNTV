@@ -1,8 +1,11 @@
+using Application.Common.Validators;
 using Application.Interfaces;
 using Application.Services;
 using Data.DbContexts;
 using Data.Interfaces;
 using Data.Repositories;
+using Domain.Entities;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using MovieNTV.Middlewares;
@@ -31,7 +34,10 @@ builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAuthManager, AuthManager>();
 builder.Services.AddTransient<IUserService, UserService>();
 
-
+//Validators
+builder.Services.AddScoped<IValidator<Genre>, GenreValidator>();
+builder.Services.AddScoped<IValidator<Movie>, MovieValidator>();
+builder.Services.AddScoped<IValidator<User>, UserValidator>();
 
 var app = builder.Build();
 
