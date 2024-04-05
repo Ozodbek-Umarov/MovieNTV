@@ -4,6 +4,7 @@ using Application.DTOs.UserDtos;
 using Application.Interfaces;
 using Data.Interfaces;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using System.Net;
 
 namespace Application.Services;
@@ -20,7 +21,7 @@ public class UserService(IUnitOfWork unitOfWork) : IUserService
         await _unitOfWork.User.DeleteAsync(user);
         throw new StatusCodeExeption(HttpStatusCode.OK, "User has been deleted sucessfully");
     }
-
+    
     public async Task<List<UserDto>> GetAllAsync()
     {
         var users = await _unitOfWork.User.GetAllAsync();

@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.UserDtos;
 using Application.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MovieNTV.Controllers
@@ -18,6 +18,7 @@ namespace MovieNTV.Controllers
         }
 
         [HttpGet("users")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllAsync()
         {
             return Ok(await _userService.GetAllAsync());
@@ -31,7 +32,7 @@ namespace MovieNTV.Controllers
         }
 
         [HttpDelete("id")]
-        public async Task<IActionResult> DeleteAsync( int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             await _userService.DeleteAsync(id);
             return Ok();
