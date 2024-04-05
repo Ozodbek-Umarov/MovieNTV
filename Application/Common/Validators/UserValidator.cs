@@ -1,24 +1,38 @@
-﻿using Domain.Entities;
+﻿
+
+using Domain.Entities;
 using FluentValidation;
 
-namespace Application.Common.Validators;
-
-public class UserValidator : AbstractValidator<User>
+namespace Application.Common.Validators
 {
-    public UserValidator()
+    public class UserValidator : AbstractValidator<User>
     {
-        RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage("bo'sh bo'lmasin")
-            .Length(2, 20).WithMessage("2 yoki 20 ta harfdan iborat bo'lsin");
-        RuleFor(x => x.LastName)
-            .NotEmpty().WithMessage("bo'sh bo'lmasin")
-            .Length(2, 20).WithMessage("2 yoki 20 ta harfdan iborat bo'lsin");
-        RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email kiriting");
-        RuleFor(x => x.Gender)
-            .NotEmpty().WithMessage("tanglang");
-        RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Parolni kiriting")
-            .Length(8, 16).WithMessage("Parol 8 va 16 belgidan iborat bo'lsinit");
+        public UserValidator()
+        {
+            RuleFor(x => x.FirstName)
+                .NotEmpty()
+                .WithMessage("Bosh bolmasligi lozim")
+                .Length(3, 50)
+                .WithMessage("First Name 3 va 50 orasida bolishi kerak");
+            RuleFor(x => x.LastName)
+                .NotEmpty()
+                .WithMessage("Last name bosh bolmasligi lozim")
+                .Length(3, 50)
+                .WithMessage("Last Name 3 va 50 orasida bolishi kerak");
+            RuleFor(x => x.Email)
+                 .NotEmpty()
+                 .WithMessage("Email bosh bolmasligi lozim")
+                 .Length(3, 50)
+                 .EmailAddress()
+                 .WithMessage("Email 3 va 50 orasida bolishi kerak");
+            RuleFor(x => x.Password)
+                 .NotEmpty()
+                 .WithMessage("Password bosh bolmasligi lozim")
+                 .Length(6, 16)
+                 .WithMessage("Password 6 va 16 orasida bolishi kerak");
+
+
+
+        }
     }
 }

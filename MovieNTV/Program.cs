@@ -6,8 +6,8 @@ using Data.Interfaces;
 using Data.Repositories;
 using Domain.Entities;
 using FluentValidation;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using MovieNTV.Configurations;
 using MovieNTV.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen();
 // Db Context
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
@@ -33,11 +33,18 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IAuthManager, AuthManager>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IGenreService, GenreService>();
+builder.Services.AddTransient<IMovieService, MovieService>();
 
-//Validators
+builder.Services.ConfigureJwtAuthorize(builder.Configuration);
+builder.Services.ConfigurationSwaggerAuthorize(builder.Configuration);
+
+
+//Validator
+builder.Services.AddScoped<IValidator<User>, UserValidator>();
 builder.Services.AddScoped<IValidator<Genre>, GenreValidator>();
 builder.Services.AddScoped<IValidator<Movie>, MovieValidator>();
-builder.Services.AddScoped<IValidator<User>, UserValidator>();
+
 
 var app = builder.Build();
 
@@ -49,6 +56,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

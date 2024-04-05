@@ -1,16 +1,24 @@
-﻿using Domain.Entities;
+﻿
+
+using Domain.Entities;
 using FluentValidation;
 
-namespace Application.Common.Validators;
-
-public class GenreValidator : AbstractValidator<Genre>
+namespace Application.Common.Validators
 {
-    public GenreValidator()
+    public class GenreValidator : AbstractValidator<Genre>
     {
-        RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Janr bo'sh bo'lmasin")
-            .Length(4, 20).WithMessage("4 yoki 20 ta harfdan iborat bo'lsin");
-        RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("kino haqida ma'lumot kiriting");
+        public GenreValidator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .WithMessage("Name bolmasligi lozim")
+                .Length(3, 50)
+                .WithMessage("Name 3 va 50 orasida bolishi kerak");
+            RuleFor(x => x.Description)
+                .NotEmpty()
+                .WithMessage("Description bosh bolmasligi lozim")
+                .Length(3, 50)
+                .WithMessage("Description  3 va 50 orasida bolishi kerak");
+        }
     }
 }
