@@ -1,6 +1,6 @@
-﻿namespace UnitTest.Service
+﻿namespace UnitTest.Service;
+
+public class AccountServiceTest
 {
-    internal class AccountServiceTest
-    {
-    }
+
 }

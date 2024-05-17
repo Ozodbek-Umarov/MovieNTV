@@ -3,35 +3,43 @@ using Data.Interfaces;
 using Data.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using UnitTest.Helpers;
 
 namespace UnitTest.Data;
 
 public class GenreRepositoryTest
 {
-    DbContextOptions<AppDbContext> options =
-        new DbContextOptionsBuilder<AppDbContext>()
-        .UseInMemoryDatabase(databaseName: "movie-ntv")
-        .Options;
-
     AppDbContext dbContext;
     IUnitOfWork unitOfWork;
 
-    [TearDown]
+    [SetUp]
     public void SetUp()
     {
-        dbContext = new AppDbContext(options);
-        unitOfWork = new UnitOfWork(dbContext);
+        dbContext = DbContextHelper.GetDbContext();
+        unitOfWork = DbContextHelper.GetUnitOfWork();
     }
 
+
     [Test]
-    public async Task AddAsync()
+    [TestCase("Test1")]
+    [TestCase("Test2")]
+    [TestCase("Test3")]
+    [TestCase("Test4")]
+    [TestCase("Test5")]
+    public async Task AddAsync(string name)
     {
-        var genres = new Genre() { Name = "Test", Description = "Yana Test", CreatedAt = DateTime.UtcNow };
+        var genres = new Genre() { Name = "Test", Description = "Yana Test"};
         await unitOfWork.Genre.CreateAsync(genres);
 
         var result = await dbContext.Genres.FirstOrDefaultAsync(p => p.Name == genres.Name);
 
         Assert.That(result, Is.Not.Null);
     }
-}
 
+    [TearDown]
+    public void TearDown()
+    {
+        dbContext.Database.EnsureDeleted();
+        dbContext.Dispose();
+    }
+}
